@@ -1,0 +1,29 @@
+# Colorscheme. More can be found in the below directory
+#include /usr/share/doc/newsboat/contrib/colorschemes/inkpot
+auto-reload yes
+
+# externel browser
+browser "/usr/local/bin/w3m %u"
+macro m set browser "/usr/local/bin/mpv %u"; open-in-browser ; set browser "/usr/local/bin/w3m %u"
+macro l set browser "/usr/local/bin/firefox %u"; open-in-browser ; set browser "/usr/local/bin/w3m %u"
+
+# unbind keys
+unbind-key ENTER
+unbind-key j
+unbind-key k
+unbind-key J
+unbind-key K
+
+# bind keys - vim style
+bind-key j down
+bind-key k up
+bind-key l open
+bind-key h quit
+
+# solarized
+color background         default   default
+color listnormal         default   default
+color listnormal_unread  default   default
+color listfocus          black     cyan
+color listfocus_unread   black     cyan
+color info               default   black
