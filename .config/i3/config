@@ -15,8 +15,7 @@ focus_follows_mouse yes
 # Right-Click+$mod to resize windows
 floating_modifier $mod
 force_focus_wrapping no
-font pango: Noto Sans Regular, FontAwesome, Monoid Mono 12
-#font pango: DejaVuSansMono Nerd, FontAwesome, Monoid Mono 12
+font pango: Noto Sans Regular, FontAwesome, Monoid Mono 13
 floating_maximum_size 1920 x 1080
 floating_minimum_size 85 x 85
 popup_during_fullscreen smart
@@ -31,20 +30,19 @@ show_marks yes
 #---------------------------------------------------------STARTUP PROGRAMS
 
 exec --no-startup-id /usr/bin/nm-applet
+exec --no-startup-id /usr/bin/dunst
+exec --no-startup-id /usr/bin/numlockx
+exec --no-startup-id /usr/bin/conky -d -c $HOME/.config/i3/conky/conky-left
+exec --no-startup-id /usr/bin/picom -cbCf
 #exec --no-startup-id blueberry-tray
 exec --no-startup-id /usr/bin/xfce4-climpan       # Clipboard
-exec --no-startup-id sleep 7 && /usr/bin/thunderbird
-exec --no-startup-id /usr/bin/numlockx on
-#exec --no-startup-id /usr/bin/picom -cbCf # Commented out because of new updates makes C (disable shadows on panels and docks is now depreciated, among others)
-exec --no-startup-id /usr/bin/picom --config $HOME/.config/picom/picom.conf
-exec --no-startup-id /usr/bin/dunst
-#exec --no-startup-id /usr/bin/volumeicon 
-exec --no-startup-id /usr/bin/caffeine-ng
+#exec --no-startup-id sleep 7 && /usr/bin/thunderbird
+exec --no-startup-id /usr/bin/volumeicon 
+exec --no-startup-id /usr/bin/caffeine
 exec --no-startup-id $HOME/.fehbg
 exec --no-startup-id /usr/bin/redshift
-exec --no-startup-id /usr/bin/barrier
-exec --no-startup-id /usr/bin/conky -d -c $HOME/.config/i3/conky/conky-left
-exec --no-startup-id $HOME/.screenlayout/monitor.sh
+#exec --no-startup-id sleep 10 && /usr/bin/anydesk
+exec --no-startup-id $HOME/.screenlayout/main.sh
 
 # runs notify-send in critcal mode and stays up for 10 seconds (10000 mili)
 exec /usr/bin/xautolock -detectsleep -time 10 -locker "$HOME/.config/i3/scripts/lock_and_blur.sh" \
@@ -54,10 +52,9 @@ exec /usr/bin/xautolock -detectsleep -time 10 -locker "$HOME/.config/i3/scripts/
 	-notifier "notify-send -u critical -t 5000 -- 'locking screen in 10 seconds'"
 
 # autotiling script
-# This command allows for new opened windows to be predetermied to open at a certain size ratio and can be set to only work on certain windows.
 # https://github.com/nwg-piotr/autotiling
-# yay -S autotiling or autotiling-rs
-exec_always --no-startup-id autotiling -w 1 3 -sw .6 -sh .6
+# yay -S autotiling
+exec_always --no-startup-id autotiling -w 1 2 3 6 8 9 -sw .7 -sh .7
 
 #----------------------------------------------------------------SCRATCHPAD
 
@@ -82,7 +79,7 @@ bindsym $mod+Shift+Escape	exec --no-startup-id prompt "Exit i3?" \
     "i3-msg exit"
 bindsym $mod+Shift+s sticky toggle
 bindsym $mod+Shift+q kill
-bindsym $mod+Shift+f fullscreen toggle global
+bindsym $mod+Shift+F11 fullscreen toggle
 bindsym $mod+s layout stacking
 bindsym $mod+w layout toggle tabbed splith
 bindsym $mod+e layout toggle split 
@@ -93,10 +90,9 @@ bindsym $mod+q split toggle; exec /usr/bin/notify-send 'tile toggle'
 #--------------------------------------------------------------RUN PROGRAMS
 
 #bindsym $mod+d exec --no-startup-id /usr/bin/rofi -show drun
-bindsym $mod+d exec rofi -modi drun -show drun -config ~/.config/rofi/rofidmenu.rasi
 bindsym $mod+f exec --no-startup-id /usr/bin/firefox
 bindsym $mod+i exec --no-startup-id /usr/bin/urxvt -e /usr/bin/htop 
-bindsym $mod+m exec --no-startup-id /usr/bin/wine ~/bin/winbox64.exe -name WinBox
+bindsym $mod+m exec --no-startup-id /usr/bin/wine ~/Downloads/winbox64.exe -name WinBox
 bindsym $mod+n exec --no-startup-id /bin/bash ~/bin/visionclientlauncher/app/visionclientlauncher.sh
 bindsym $mod+b exec --no-startup-id /bin/bash ~/bin/designerlauncher/app/designerlauncher.sh
 bindsym $mod+p exec --no-startup-id $HOME/.config/i3/scripts/promote-window
@@ -104,16 +100,18 @@ bindsym $mod+x exec --no-startup-id $HOME/.config/i3/scripts/lock_and_blur.sh
 bindsym $mod+Shift+comma exec --no-startup-id /usr/bin/autorandr mobile 
 bindsym $mod+Shift+period exec --no-startup-id /usr/bin/autorandr work
 bindsym $mod+F3 exec --no-startup-id /usr/bin/pcmanfm 
-bindsym $mod+F12 exec --no-startup-id /usr/bin/brightnessctl s +5%
-bindsym $mod+F11 exec --no-startup-id /usr/bin/brightnessctl s 5%-
+bindsym $mod+F12 exec --no-startup-id /usr/bin/brightnessctl --output DP-3 set +20%
+bindsym $mod+F11 exec --no-startup-id /usr/bin/brightnessctl --output DP-3 set -20%
 
 # Take a screenshot with scrot
 bindsym $mod+F10 --release exec --no-startup-id /usr/bin/scrot -d 5; exec notify-send 'Taking a screenshot. 5 second timer'
 bindsym $mod+Shift+F10 --release exec --no-startup-id /usr/bin/scrot -d 5 -s; exec notify-send 'Select a window. 5 second timer.'
-bindsym Print exec /usr/bin/scrot ~/Pictures/%Y%m%d-screenshot.png && notify-send 'Screenshot saved to ~/Pictures/$("date +%Y%m%d")-screenshot.png'
+bindsym Print exec /usr/bin/scrot -u -s ~/Pictures/%Y%m%d-screenshot.png && notify-send 'Screenshot saved to ~/Pictures/screenshots/$(date +%Y%m%d")-screenshot.png'
 
-bindsym $mod+Return exec --no-startup-id /usr/bin/urxvt
-bindsym $mod+Shift+Return exec --no-startup-id /usr/bin/urxvt -name term
+#bindsym $mod+Return exec --no-startup-id /usr/bin/urxvt 
+bindsym $mod+Return exec --no-startup-id /usr/bin/xfce4-terminal
+#bindsym $mod+Shift+Return exec --no-startup-id /usr/bin/urxvt -name term
+bindsym $mod+Shift+Return exec --no-startup-id /usr/bin/xfce4-terminal -name term
 
 # volume
 #bindsym XF86AudioRaiseVolume exec amixer -D pulse sset Master 5%+ && pkill -RTMIN+1 i3blocks
@@ -158,27 +156,31 @@ for_window [class="Galculator"] floating enable border pixel 1
 for_window [title="File Transfer"] floating enable
 for_window [class="Blueberry.py" instance="blueberry.py"] floating enable
 for_window [class="Bluetooth-sendto" instance="bluetooth-sendto"] floating enable
-for_window [class="Lxappearance"] floating enable stick enable border normal
-for_window [class="Pavucontrol"] floating enable 
-for_window [class="(?i)virtualbox(?i)virtualbox(?i)virtualbox(?i)virtualbox"] floating enable 
-for_window [class="(?i)gsimplecal"] floating enable, move position mouse, move down 28 px
-for_window [class="Pcmanfm"] floating enable move position right
-for_window [class="(?i)wego"] floating enable, move position mouse, move down 28 px
 for_window [window_role="About"] floating enable
-for_window [class="com-inductiveautomation-ignition-client-launch-BootstrapSwing" instance="com-inductiveautomation-ignition-client-launch-BootstrapSwing"] floating enable
-    for_window [class="Pcmanfm"] resize set 900 700
+for_window [class="Pcmanfm"] floating enable move position right
+    for_window [class="Pcmanfm"] resize set 820 640
 for_window [class="Thunar"] floating enable move position right
-    for_window [class="Thunar"] resize set 900 700
-for_window [class="feh"] floating enable move position right
-    for_window [class="feh"] resize set 820 640
+for_window [class="Caja"] floating enable move position right
+for_window [class="Nemo"] floating enable move position right
+    for_window [class="Thunar"] resize set 820 640
+    for_window [class="Nemo"] resize set 900 700 
+    for_window [class="Caja"] resize set  700 
 for_window [class="org.gnome.Nautilus"] floating enable move position right
-    for_window [class="org.gnome.Nautilus"] resize set 900 700
+    for_window [class="org.gnome.Nautilus"] resize set 900 700 
+for_window [class="Lxappearance"] floating enable stick enable border normal
 for_window [class="Arandr"] floating enable
     for_window [class="Arandr"] resize set 640 480
+for_window [class="RustDesk"] floating enable
+    for_window [class="* - RustDesk"] resize set 640 480
+for_window [class="* - RustDesk"] floating enable
+    for_window [class="RustDesk"] resize set 640 480
+for_window [class="(?i)gsimplecal"] floating enable, move position mouse, move down 28 px
+for_window [title="term"] floating enable move position center
+for_window [class="(?i)wego"] floating enable, move position mouse, move down 28 px
 for_window [title="term"] floating enable move position center
     for_window [title="term"] resize set 900 40
 for_window [title="^WinBox"] floating enable
-    for_window [title="^WinBox"] resize set 800 500
+    for_window [title="^WinBox"] resize set 720 480
 #for_window [class="Yad"] floating enable
 
 # Sticky floating windows. Only takes effect if the windows is floating
@@ -187,6 +189,8 @@ for_window [class="Brave*"] sticky enable
 for_window [class="(?i)firefox*"] sticky enable
 for_window [class="^org.remmina.Remmina"] sticky enable
 for_window [class="Thunar"] sticky enable
+for_window [class="Caja"] sticky enable
+for_window [class="Nemo"] sticky enable
 for_window [class="Pcmanfm"] sticky enable
 for_window [class="org.gnome.Nautilus"] sticky enable
 for_window [class="^Arandr"] sticky enable
@@ -198,23 +202,20 @@ set $ws1 "1:"
 set $ws2 "2:"
 set $ws3 "3:"
 set $ws4 "4:"
-set $ws5 "5:"
+set $ws5 "5:"
 set $ws6 "6:"
-set $ws7 "7:"
+set $ws7 "7:"
 set $ws8 "8:"
 set $ws9 "9:"
 set $ws10 "10:"
 
-#workspace "1:" output HDMI-1
-#workspace "2:" output HDMI-1
-#workspace "3:" output DP-3
-#workspace "4:" output HDMI-1
-#workspace "5:" output HDMI-1
-#workspace "6:" output DP-3
-#workspace "7:" output HDMI-1
-#workspace "8:" output DP-3
-#workspace "9:" output DP-3
-#workspace "10:" output DP-3
+#workspace "2:" output DP-3
+#workspace "7:" output DP-3
+#workspace "8" output DP-3
+
+#workspace "3:" output HDMI-1
+#workspace "9:" output HDMI-1
+#workspace "10:" output HDMI-1
 
 # Open applications on specific workspaces 
 assign [class="Brave"] $ws1
@@ -227,13 +228,11 @@ assign [class="Steam"] $ws5
 #assign [class="org.remmina.Remmina"] $ws6
 assign [class="Libreoffice-*"] $ws6
 assign [class="Manuskript"] $ws6
-assign [class="obsidian"] $ws6
-assign [class="Dailys - capitan - Obsidian v1.6.7"] $ws6
+assign [class="Obsidian"] $ws6
 assign [class="Gimp-*"] $ws7
-assign [class="gimp-*"] $ws7
-assign [class="GNU Image Manipulation Program*"] $ws7
 assign [class="Spotify*"] $ws8
 assign [class="TeamViewer"] $ws9
+assign [class="RustDesk"] $ws9
 assign [class="Anydesk"] $ws9
 assign [class="com-inductive*"] $ws10
 
@@ -381,11 +380,7 @@ for_window [class="^Links$" title="^Links - "] floating enable
 #--------------------------------------------------------------THEME COLORS
 
 # class                         border  backgr. text    indic.  child_border
-# grey around border
-#client.focused			        #5d12b3 #5d12b3 #ededed #7b7d7d #7b7d7d
-# light purple around border
-client.focused			        #5d12b3 #5d12b3 #ededed #9d66dd #9d66dd
-# light grey around border
+client.focused			        #5d12b3 #5d12b3 #ededed #7b7d7d #7b7d7d
 #client.focused			        #d9d9d9 #cecece #000000 #d9d9d9 #d9d9d9
 client.focused_inactive	        #111111	#111111 #dddddd #111111 #111111
 client.unfocused               #222222 #000000 #555555 #222222 #222222
@@ -400,8 +395,9 @@ client.background		        #1A1A1A
 bar {
 	position top
 	output primary
+	output DP-3
         status_command /usr/bin/i3blocks -c ~/.config/i3/i3blocks/i3blocks
-        tray_output HDMI-1
+        tray_output DP-3
         tray_padding 2
 		colors {
 		    background #333333 # menubar color
@@ -415,30 +411,27 @@ bar {
 	}
 }
 
-# Second screen
 #bar {
 #	position top
 #	output DP-3
-#       #status_command /usr/bin/i3blocks -c ~/.config/i3/i3blocks/i3blocks
-#        status_command /usr/bin/i3blocks -c ~/.config/i3/i3blocks/i3blocks_alt
+#        #status_command /usr/bin/i3blocks -c ~/.config/i3/i3blocks/i3blocks
+#       status_command /usr/bin/i3blocks -c ~/.config/i3/i3blocks/i3blocks_alt
 #		colors {
 #			background #111111
 #	}
 #}
 
-# Third screen
-#bar {
-#	position top
-#	output DP-0
-#       #status_command /usr/bin/i3blocks -c ~/.config/i3/i3blocks/i3blocks
-#        status_command /usr/bin/i3blocks -c ~/.config/i3/i3blocks/i3blocks_alt
-#		colors {
-#			background #111111
-#	}
-#}
 #-----------------------------------------------------------------TESTING
 
 # FOR TESTING
 #bindsym $mod+F12 exec "notify-send Hello, i3"
 #bindsym $mod+F12 exec "notify-send \\"Hello, i3; from $USER\\""
 #!/bin/sh
+
+#-----------------------------------------------------------------ROFI
+
+#####################################
+# Application menu handled by rofi: #
+#####################################
+
+bindsym $mod+d exec rofi -modi drun -show drun -config ~/.config/rofi/rofidmenu.rasi
